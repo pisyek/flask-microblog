@@ -1,14 +1,14 @@
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
+from flask import json as fJson
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app
 from app import db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, UploadFileForm
 from app.models import User
 
 @app.route('/')
-@app.route('/index')
 @login_required
 def index():
     user = {'username': 'hafiz'}
@@ -81,3 +81,16 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form)
 
+'''
+Upload file json/csv/excel
+'''
+@app.route('/upload-file', methods=['GET', 'POST'])
+@login_required
+def upload_file():
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        app.logger.info('import file')
+        data = fJson.load(form.selected_file.data)
+        #app.logger.info(data[0]['tags'][0])
+        flash('Import success.')
+    return render_template('upload.html', form=form)

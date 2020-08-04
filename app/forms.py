@@ -36,7 +36,7 @@ class EditProfileForm(FlaskForm):
 class UploadFileForm(FlaskForm):
     selected_file = FileField('Select File', validators=[
         FileRequired(),
-        FileAllowed(['pdf', 'png', 'jpg', 'json'], 'PDF only.')
+        FileAllowed(['json'], 'JSON only.')
     ])
     submit = SubmitField('Submit')
 
